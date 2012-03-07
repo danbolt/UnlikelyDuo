@@ -25,7 +25,7 @@ GLfloat p2View[16];  // player 2 perspective
 
 double p1X = 0.0;
 double p1Y = 0.0;
-double p1Z = 0.0;
+double p1Z = -5.0;
 double p1XRotation = 0.0;
 double p1YRotation = 0.0;
 double p1ZRotation = 0.0;
@@ -68,7 +68,7 @@ void renderP1()
 	gluPerspective(90, 1.3, 1, 75);    //uses GLU; may want to re-implement with glFrustrum later
 	glViewport(0, 0, 320, 240);
 
-	glTranslatef(0, 0, -5);
+	gluLookAt(p1X, p1Y, p1Z, 0.0, 0.0, 0.0, 0, 1, 0);
 
 	glBegin(GL_QUADS);
 	glColor3f(0, 0, 1);
@@ -106,7 +106,12 @@ void loop()
 			}
 		}
 
-		// potential update function goes here
+		keys = SDL_GetKeyState(NULL);
+		
+		if (keys[SDLK_e])
+		{
+			p1X += 0.1;
+		}
 
 		draw();
 
