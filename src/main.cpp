@@ -39,27 +39,43 @@ double p2ZRotation = 0.0;
 
 void renderP2()
 {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluPerspective(90, 1.3, 1, 75);    //uses GLU; may want to re-implement with glFrustrum later
 	glViewport(0, 240, 320, 240);
+
+	//camera placement
+        glTranslatef(0, 0, -5);
 
 	glBegin(GL_QUADS);
 	glColor3f(1, 0, 0);
-	glVertex2f(0,0);
-	glVertex2f(1,0);
-	glVertex2f(1,1);
-	glVertex2f(0,1);
+	glVertex3f(-0.5,-0.5,0);
+	glVertex3f(0.5,-0.5,0);
+	glVertex3f(0.5,0.5,0);
+	glVertex3f(-0.5,0.5,0);
+	glColor3f(0, 1, 0);
+        glVertex3f(-0.5,-0.5,0);
+	glVertex3f(-0.5,-0.5,0.5);
+	glVertex3f(-0.5,0.5,0.5);
+	glVertex3f(-0.5,0.5,-0.5);
 	glEnd();
 }
 
 void renderP1()
 {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluPerspective(90, 1.3, 1, 75);    //uses GLU; may want to re-implement with glFrustrum later
 	glViewport(0, 0, 320, 240);
+
+	glTranslatef(0, 0, -5);
 
 	glBegin(GL_QUADS);
 	glColor3f(0, 0, 1);
-	glVertex2f(0,0);
-	glVertex2f(1,0);
-	glVertex2f(1,1);
-	glVertex2f(0,1);
+	glVertex3f(-0.5,-0.5,0);
+	glVertex3f(0.5,-0.5,0);
+	glVertex3f(0.5,0.5,0);
+	glVertex3f(-0.5,0.5,0);
 	glEnd();
 }
 
