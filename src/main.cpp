@@ -27,6 +27,10 @@ double p1_X = 0.0;
 double p1_Y = 0.0;
 double p1_Z = 0.1;
 
+double p2_X = 0.0;
+double p2_Y = 0.0;
+double p2_Z = 1.0;
+
 double p1_camX = 0.0;
 double p1_camY = 0.0;
 double p1_camZ = 0.0;
@@ -34,12 +38,48 @@ double p1_camXLook = 0.0;
 double p1_camYLook = 0.0;
 double p1_camZLook = 0.0;
 
-double p2_camX = 5.0;
-double p2_camY = 2.5;
-double p2_camZ = -5.0;
+double p2_camX = 0.0;
+double p2_camY = -2.5;
+double p2_camZ = 5.0;
 double p2_camXLook = 0.0;
 double p2_camYLook = 0.0;
 double p2_camZLook = 0.0;
+
+void draw_P1Model()
+{
+	glBegin(GL_QUADS);
+	glColor3f(0, 0, 1);
+	glVertex3f(p1_X, p1_Y, p1_Z);
+	glVertex3f(p1_X, p1_Y + 1, p1_Z);
+	glVertex3f(p1_X + 1, p1_Y + 1, p1_Z);
+	glVertex3f(p1_X + 1, p1_Y, p1_Z);
+	glEnd();
+}
+
+void draw_P2Model()
+{
+	glBegin(GL_QUADS);
+	glColor3f(1, 0, 0);
+	glVertex3f(p2_X, p2_Y, p2_Z);
+	glVertex3f(p2_X, p2_Y + 1, p2_Z);
+	glVertex3f(p2_X + 1, p2_Y + 1, p2_Z);
+	glVertex3f(p2_X + 1, p2_Y, p2_Z);
+	glColor3f(1, 0, 0);
+	glVertex3f(p2_X, p2_Y, p2_Z);
+	glColor3f(1, 0, 1);
+	glVertex3f(p2_X, p2_Y, p2_Z + 1);
+	glVertex3f(p2_X + 1, p2_Y, p2_Z + 1);
+	glColor3f(1, 0, 0);
+	glVertex3f(p2_X + 1, p2_Y, p2_Z);
+	glColor3f(1, 0, 1);
+	glVertex3f(p2_X, p2_Y + 1, p2_Z);
+	glColor3f(1, 0, 1);
+	glVertex3f(p2_X, p2_Y + 1, p2_Z + 1);
+	glVertex3f(p2_X + 1, p2_Y + 1, p2_Z + 1);
+	glColor3f(1, 0, 0);
+	glVertex3f(p2_X + 1, p2_Y + 1, p2_Z);
+	glEnd();
+}
 
 //quick function to get green grass
 void draw_renderGround()
@@ -75,13 +115,9 @@ void renderP1()
 
 	draw_renderGround();
 
-	glBegin(GL_QUADS);
-	glColor3f(0, 0, 1);
-	glVertex3f(p1_X, p1_Y, p1_Z);
-	glVertex3f(p1_X, p1_Y + 1, p1_Z);
-	glVertex3f(p1_X + 1, p1_Y + 1, p1_Z);
-	glVertex3f(p1_X + 1, p1_Y, p1_Z);
-	glEnd();
+	draw_P1Model();
+
+	draw_P2Model();
 }
 
 void renderP2()
@@ -92,15 +128,13 @@ void renderP2()
 	glViewport(0, 0, 320, 240);
 
 	//camera placement
-	gluLookAt(p2_camX, p2_camY, p2_camZ, 0.0, 0.0, 0.0, 0, 1, 0);
+	gluLookAt(p2_camX, p2_camY, p2_camZ, p2_camXLook, p2_camYLook, p2_camZLook, 0, 0, 1);
 
-	glBegin(GL_QUADS);
-	glColor3f(1, 0, 0);
-	glVertex3f(-0.5,-0.5,0);
-	glVertex3f(0.5,-0.5,0);
-	glVertex3f(0.5,0.5,0);
-	glVertex3f(-0.5,0.5,0);
-	glEnd();
+	draw_renderGround();
+
+	draw_P1Model();
+
+	draw_P2Model();
 }
 
 // this is the primary rendering function. from here the two screen-drawing functions should be called
@@ -130,32 +164,59 @@ void loop()
 				quit = 1;
 			}
 		}
-
-		keys = SDL_GetKeyState(NULL);
 		
-		if (keys[SDLK_d])
+		//update block
 		{
-			p1_X += 0.1;
+			keys = SDL_GetKeyState(NULL);
+			
+			if (keys[SDLK_d])
+			{
+				p1_X += 0.1;
+			}
+			if (keys[SDLK_a])
+			{
+				p1_X -= 0.1;
+			}
+			if (keys[SDLK_w])
+			{
+				p1_Y += 0.1;
+			}
+			if (keys[SDLK_s])
+			{
+				p1_Y -= 0.1;
+			}
+	
+			p1_camX = p1_X;
+			p1_camY = p1_Y - 5;
+			p1_camZ = p1_Z + 5;
+	                p1_camXLook = p1_X - p1_camX;
+			p1_camYLook = p1_Y - p1_camY;
+			p1_camZLook = p1_Z - p1_camZ;      \
+			
+			if (keys[SDLK_LEFT])
+			{
+				p2_X -= 0.1;
+			}
+			if (keys[SDLK_RIGHT])
+			{
+				p2_X += 0.1;
+			}
+			if (keys[SDLK_UP])
+			{
+				p2_Y += 0.1;
+			}
+			if (keys[SDLK_DOWN])
+			{
+				p2_Y -= 0.1;
+			}
+			
+			p2_camX = p2_X;
+			p2_camY = p2_Y - 3;
+			p2_camZ = p2_Z + 2;
+	                p2_camXLook = p2_X;
+			p2_camYLook = p2_Y;
+			p2_camZLook = p2_Z;
 		}
-		if (keys[SDLK_a])
-		{
-			p1_X -= 0.1;
-		}
-		if (keys[SDLK_w])
-		{
-			p1_Y += 0.1;
-		}
-		if (keys[SDLK_s])
-		{
-			p1_Y -= 0.1;
-		}
-
-		p1_camX = p1_X;
-		p1_camY = p1_Y - 5;
-		p1_camZ = p1_Z + 5;
-                p1_camXLook = p1_X - p1_camX;
-		p1_camYLook = p1_Y - p1_camY;
-		p1_camZLook = p1_Z - p1_camZ;
 
 		draw();
 
