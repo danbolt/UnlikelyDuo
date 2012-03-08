@@ -23,41 +23,43 @@ Uint8* keys;
 GLfloat p1View[16];  // player 1 perspective
 GLfloat p2View[16];  // player 2 perspective
 
-double p1X = 0.0;
-double p1Y = 0.0;
-double p1Z = -5.0;
-double p1XRotation = 0.0;
-double p1YRotation = 0.0;
-double p1ZRotation = 0.0;
+double p1_X = 0.0;
+double p1_Y = 0.0;
+double p1_Z = 0.1;
 
-double p2X = 0.0;
-double p2Y = 0.0;
-double p2Z = 0.0;
-double p2XRotation = 0.0;
-double p2YRotation = 0.0;
-double p2ZRotation = 0.0;
+double p1_camX = 0.0;
+double p1_camY = 0.0;
+double p1_camZ = 0.0;
+double p1_camXLook = 0.0;
+double p1_camYLook = 0.0;
+double p1_camZLook = 0.0;
 
-void renderP2()
+double p2_camX = 5.0;
+double p2_camY = 2.5;
+double p2_camZ = -5.0;
+double p2_camXLook = 0.0;
+double p2_camYLook = 0.0;
+double p2_camZLook = 0.0;
+
+//quick function to get green grass
+void draw_renderGround()
 {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluPerspective(90, 1.3, 1, 75);    //uses GLU; may want to re-implement with glFrustrum later
-	glViewport(0, 240, 320, 240);
-
-	//camera placement
-        glTranslatef(0, 0, -5);
-
 	glBegin(GL_QUADS);
-	glColor3f(1, 0, 0);
-	glVertex3f(-0.5,-0.5,0);
-	glVertex3f(0.5,-0.5,0);
-	glVertex3f(0.5,0.5,0);
-	glVertex3f(-0.5,0.5,0);
-	glColor3f(0, 1, 0);
-        glVertex3f(-0.5,-0.5,0);
-	glVertex3f(-0.5,-0.5,0.5);
-	glVertex3f(-0.5,0.5,0.5);
-	glVertex3f(-0.5,0.5,-0.5);
+	glColor3f(0, 1, 0.1);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 10, 0);
+	glVertex3f(10, 10, 0);
+	glVertex3f(10, 0, 0);
+	glEnd();
+	
+	glLineWidth(2.0f);
+
+	glBegin(GL_LINES);
+	glColor3f(0, 0.8, 0.5);
+	glVertex3f(5, 0, 0.01);
+	glVertex3f(5, 10, 0.01);
+	glVertex3f(0, 5, 0.01);
+	glVertex3f(10, 5, 0.01);
 	glEnd();
 }
 
@@ -66,12 +68,34 @@ void renderP1()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluPerspective(90, 1.3, 1, 75);    //uses GLU; may want to re-implement with glFrustrum later
-	glViewport(0, 0, 320, 240);
+	glViewport(0, 240, 320, 240);
 
-	gluLookAt(p1X, p1Y, p1Z, 0.0, 0.0, 0.0, 0, 1, 0);
+	//camera placement
+	gluLookAt(p1_camX, p1_camY, p1_camZ, p1_camX + p1_camXLook, p1_camY + p1_camYLook, p1_camZ + p1_camZLook, 0, 0, 1);
+
+	draw_renderGround();
 
 	glBegin(GL_QUADS);
 	glColor3f(0, 0, 1);
+	glVertex3f(p1_X, p1_Y, p1_Z);
+	glVertex3f(p1_X, p1_Y + 1, p1_Z);
+	glVertex3f(p1_X + 1, p1_Y + 1, p1_Z);
+	glVertex3f(p1_X + 1, p1_Y, p1_Z);
+	glEnd();
+}
+
+void renderP2()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluPerspective(90, 1.3, 1, 75);    //uses GLU; may want to re-implement with glFrustrum later
+	glViewport(0, 0, 320, 240);
+
+	//camera placement
+	gluLookAt(p2_camX, p2_camY, p2_camZ, 0.0, 0.0, 0.0, 0, 1, 0);
+
+	glBegin(GL_QUADS);
+	glColor3f(1, 0, 0);
 	glVertex3f(-0.5,-0.5,0);
 	glVertex3f(0.5,-0.5,0);
 	glVertex3f(0.5,0.5,0);
@@ -82,9 +106,10 @@ void renderP1()
 // this is the primary rendering function. from here the two screen-drawing functions should be called
 void draw()
 {
+	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0.0,0.0,0.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	renderP1();
 	renderP2();
 
@@ -108,10 +133,29 @@ void loop()
 
 		keys = SDL_GetKeyState(NULL);
 		
-		if (keys[SDLK_e])
+		if (keys[SDLK_d])
 		{
-			p1X += 0.1;
+			p1_X += 0.1;
 		}
+		if (keys[SDLK_a])
+		{
+			p1_X -= 0.1;
+		}
+		if (keys[SDLK_w])
+		{
+			p1_Y += 0.1;
+		}
+		if (keys[SDLK_s])
+		{
+			p1_Y -= 0.1;
+		}
+
+		p1_camX = p1_X;
+		p1_camY = p1_Y - 5;
+		p1_camZ = p1_Z + 5;
+                p1_camXLook = p1_X - p1_camX;
+		p1_camYLook = p1_Y - p1_camY;
+		p1_camZLook = p1_Z - p1_camZ;
 
 		draw();
 
