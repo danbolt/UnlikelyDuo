@@ -30,6 +30,9 @@ double p1_Z = 0.1;
 double p2_X = 0.0;
 double p2_Y = 0.0;
 double p2_Z = 1.0;
+double p2_XRotate = 0.0;
+double p2_YRotate = 0.0;
+double p2_ZRotate = 0.0;
 
 double p1_camX = 0.0;
 double p1_camY = 0.0;
@@ -58,27 +61,33 @@ void draw_P1Model()
 
 void draw_P2Model()
 {
+	glPushMatrix();
+	glTranslatef(p2_X, p2_Y, p2_Z);
+	glRotatef(-p2_ZRotate, 0, 0, 1);
+
 	glBegin(GL_QUADS);
 	glColor3f(1, 0, 0);
-	glVertex3f(p2_X, p2_Y, p2_Z);
-	glVertex3f(p2_X, p2_Y + 1, p2_Z);
-	glVertex3f(p2_X + 1, p2_Y + 1, p2_Z);
-	glVertex3f(p2_X + 1, p2_Y, p2_Z);
+	glVertex3f(-0.5, -0.5, -0.5);
+	glVertex3f(-0.5, 0.5, -0.5);
+	glVertex3f(0.5, 0.5, -0.5);
+	glVertex3f(0.5, -0.5, -0.5);
 	glColor3f(1, 0, 0);
-	glVertex3f(p2_X, p2_Y, p2_Z);
-	glColor3f(1, 0, 1);
-	glVertex3f(p2_X, p2_Y, p2_Z + 1);
-	glVertex3f(p2_X + 1, p2_Y, p2_Z + 1);
+	glVertex3f(-0.5, -0.5, -0.5);
+	glColor3f(1, -0.5, 1);
+	glVertex3f(-0.5, -0.5, 0.5);
+	glVertex3f(0.5, -0.5, 0.5);
 	glColor3f(1, 0, 0);
-	glVertex3f(p2_X + 1, p2_Y, p2_Z);
+	glVertex3f(0.5, -0.5, -0.5);
 	glColor3f(1, 0, 1);
-	glVertex3f(p2_X, p2_Y + 1, p2_Z);
+	glVertex3f(-0.5, 0.5, -0.5);
 	glColor3f(1, 0, 1);
-	glVertex3f(p2_X, p2_Y + 1, p2_Z + 1);
-	glVertex3f(p2_X + 1, p2_Y + 1, p2_Z + 1);
+	glVertex3f(-0.5, 0.5, 0.5);
+	glVertex3f(0.5, 0.5, 0.5);
 	glColor3f(1, 0, 0);
-	glVertex3f(p2_X + 1, p2_Y + 1, p2_Z);
+	glVertex3f(0.5, 0.5, -0.5);
 	glEnd();
+
+	glPopMatrix();
 }
 
 //quick function to get green grass
@@ -133,6 +142,7 @@ void renderP2()
 	draw_renderGround();
 
 	draw_P1Model();
+	
 
 	draw_P2Model();
 }
@@ -191,28 +201,43 @@ void loop()
 			p1_camZ = p1_Z + 5;
 	                p1_camXLook = p1_X - p1_camX;
 			p1_camYLook = p1_Y - p1_camY;
-			p1_camZLook = p1_Z - p1_camZ;      \
-			
-			if (keys[SDLK_LEFT])
-			{
-				p2_X -= 0.1;
-			}
-			if (keys[SDLK_RIGHT])
-			{
-				p2_X += 0.1;
-			}
+			p1_camZLook = p1_Z - p1_camZ;
+
+			double p2_Thrust = 0.0;
+
 			if (keys[SDLK_UP])
 			{
-				p2_Y += 0.1;
+				p2_Thrust += 0.1;
 			}
 			if (keys[SDLK_DOWN])
 			{
-				p2_Y -= 0.1;
+				p2_Thrust -= 0.1;
 			}
 			
-			p2_camX = p2_X;
-			p2_camY = p2_Y - 3;
-			p2_camZ = p2_Z + 2;
+			if (keys[SDLK_LEFT])
+			{
+				p2_ZRotate -= 2.0;
+			}
+			if (keys[SDLK_RIGHT])
+			{
+				p2_ZRotate += 2.0;
+			}    
+
+			if (keys[SDLK_g])
+			{
+				p2_YRotate += 2.0;
+			}
+			if (keys[SDLK_b])
+			{
+				p2_YRotate -= 2.0;
+			}
+			
+			p2_X += p2_Thrust*cos((M_PI/180.0)*(p2_ZRotate - 90));
+			p2_Y += p2_Thrust*sin((M_PI/180.0)*(p2_ZRotate + 90));
+
+			p2_camX = p2_X - 3*cos((M_PI/180.0)*(p2_ZRotate - 90));
+			p2_camY = p2_Y - 3*sin((M_PI/180.0)*(p2_ZRotate + 90));
+			p2_camZ = p2_Z + 1;
 	                p2_camXLook = p2_X;
 			p2_camYLook = p2_Y;
 			p2_camZLook = p2_Z;
