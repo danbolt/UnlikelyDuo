@@ -10,10 +10,15 @@
 #include <cstdio>
 #include <cmath>
 #include <cstdlib>
+#include <vector>
 
 #include <SDL/SDL.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+
+#include "ParametricPoint.h"
+
+using namespace std;
 
 SDL_Surface* screen;
 
@@ -23,7 +28,7 @@ Uint8* keys;
 GLfloat p1View[16];  // player 1 perspective
 GLfloat p2View[16];  // player 2 perspective
 
-double p1_X = 0.0;
+double p1_X = 50.0;
 double p1_Y = 0.0;
 double p1_Z = 0.1;
 
@@ -49,6 +54,8 @@ double p2_camZ = 5.0;
 double p2_camXLook = 0.0;
 double p2_camYLook = 0.0;
 double p2_camZLook = 0.0;
+
+vector<ParametricPoint> pointList;
 
 void draw_P1Model()
 {
@@ -147,6 +154,24 @@ void draw_P2Model()
 	glPopMatrix();
 }
 
+void draw_ParametricPoint(ParametricPoint* pr)
+{
+	glPushMatrix();
+	glTranslatef(pr->x, pr->y, 0.0);
+	glRotatef(-(pr->normalDirection), 0, 0, 1);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 1);
+	glVertex3f(0.0, 0.0, 0.1);
+	glVertex3f(0.0, 5.0, 0.1);
+	glEnd();
+	glPointSize(2);
+	glBegin(GL_POINTS);
+	glColor3f(1.0, 1.0, 1.0);
+	glVertex3f(0.0, 0.0, 0.1);
+	glEnd();
+	glPopMatrix();
+}
+
 //quick function to get green grass
 void draw_renderGround()
 {
@@ -187,6 +212,11 @@ void renderP1()
 	draw_P1Model();
 
 	draw_P2Model();
+	
+	for(std::vector<ParametricPoint>::iterator it = pointList.begin(); it != pointList.end(); ++it)
+	{
+		draw_ParametricPoint(&(*it));
+	}
 }
 
 void renderP2()
@@ -205,15 +235,10 @@ void renderP2()
 
 	draw_P2Model();
 	
-	glMatrixMode(GL_PROJECTION);
-	glOrtho(0, 320, 240, 480, 0, 1);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-
-	glBegin(GL_POINTS);
-	glColor3f(1.0, 1.0, 1.0);
-	glVertex2f(20, 20);
-	glEnd();
+	for(std::vector<ParametricPoint>::iterator it = pointList.begin(); it != pointList.end(); ++it)
+	{
+		draw_ParametricPoint(&(*it));
+	}
 }
 
 // this is the primary rendering function. from here the two screen-drawing functions should be called
@@ -384,7 +409,17 @@ int main (int argc, char* argv[])
 {
 	init();
 	
+	ParametricPoint p1(30, 20, 0);
+	ParametricPoint p2(50, 20, 0);
+	ParametricPoint p3(70, 20, 0);
+
+	pointList.push_back(p1);
+	pointList.push_back(p2);
+	pointList.push_back(p3);
+	
 	loop();
+	
+	pointList.clear();
 	
 	deinit();
 
