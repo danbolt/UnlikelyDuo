@@ -64,6 +64,7 @@ void draw_P2Model()
 	glPushMatrix();
 	glTranslatef(p2_X, p2_Y, p2_Z);
 	glRotatef(-p2_ZRotate, 0, 0, 1);
+	glRotatef(-p2_XRotate, 1, 0, 0);
 
 	glBegin(GL_QUADS);
 	glColor3f(1, 0, 0);
@@ -204,14 +205,37 @@ void loop()
 			p1_camZLook = p1_Z - p1_camZ;
 
 			double p2_Thrust = 0.0;
-
-			if (keys[SDLK_UP])
+			
+			if (keys[SDLK_SPACE])
 			{
-				p2_Thrust += 0.1;
+				p2_Thrust = 0.1;
 			}
+
+			//changes the rotate value based on arrow keys, and slowly snaps back
 			if (keys[SDLK_DOWN])
 			{
-				p2_Thrust -= 0.1;
+				if (p2_XRotate < 90)
+				{
+					p2_XRotate += 2.0;
+				}
+			}
+			else if (keys[SDLK_UP])
+			{
+				if (p2_XRotate > -90)
+				{
+					p2_XRotate -= 2.0;
+				}
+			}
+			else
+			{
+				if (p2_XRotate > 1.0)
+				{
+					p2_XRotate -= 2.0;
+				}
+				else if (p2_XRotate < -1.0)
+				{
+					p2_XRotate += 2.0;
+				}
 			}
 			
 			if (keys[SDLK_LEFT])
@@ -221,23 +245,15 @@ void loop()
 			if (keys[SDLK_RIGHT])
 			{
 				p2_ZRotate += 2.0;
-			}    
+			}
 
-			if (keys[SDLK_g])
-			{
-				p2_YRotate += 2.0;
-			}
-			if (keys[SDLK_b])
-			{
-				p2_YRotate -= 2.0;
-			}
-			
 			p2_X += p2_Thrust*cos((M_PI/180.0)*(p2_ZRotate - 90));
 			p2_Y += p2_Thrust*sin((M_PI/180.0)*(p2_ZRotate + 90));
+			p2_Z -= p2_Thrust*sin((M_PI/180.0)*(p2_XRotate));
 
 			p2_camX = p2_X - 3*cos((M_PI/180.0)*(p2_ZRotate - 90));
 			p2_camY = p2_Y - 3*sin((M_PI/180.0)*(p2_ZRotate + 90));
-			p2_camZ = p2_Z + 1;
+			p2_camZ = p2_Z + 1 + 3*sin((M_PI/180.0)*(p2_XRotate));
 	                p2_camXLook = p2_X;
 			p2_camYLook = p2_Y;
 			p2_camZLook = p2_Z;
