@@ -214,14 +214,14 @@ void loop()
 			//changes the rotate value based on arrow keys, and slowly snaps back
 			if (keys[SDLK_DOWN])
 			{
-				if (p2_XRotate < 90)
+				if (p2_XRotate <= 90)
 				{
 					p2_XRotate += 2.0;
 				}
 			}
 			else if (keys[SDLK_UP])
 			{
-				if (p2_XRotate > -90)
+				if (p2_XRotate >= -90)
 				{
 					p2_XRotate -= 2.0;
 				}
@@ -253,7 +253,7 @@ void loop()
 
 			p2_camX = p2_X - 3*cos((M_PI/180.0)*(p2_ZRotate - 90));
 			p2_camY = p2_Y - 3*sin((M_PI/180.0)*(p2_ZRotate + 90));
-			p2_camZ = p2_Z + 1 + 3*sin((M_PI/180.0)*(p2_XRotate));
+			p2_camZ = p2_Z + 3*sin((M_PI/180.0)*(p2_XRotate));
 	                p2_camXLook = p2_X;
 			p2_camYLook = p2_Y;
 			p2_camZLook = p2_Z;
