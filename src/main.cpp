@@ -72,20 +72,65 @@ void draw_P2Model()
 	glVertex3f(-0.5, 0.5, -0.5);
 	glVertex3f(0.5, 0.5, -0.5);
 	glVertex3f(0.5, -0.5, -0.5);
+
 	glColor3f(1, 0, 0);
 	glVertex3f(-0.5, -0.5, -0.5);
-	glColor3f(1, -0.5, 1);
+	glColor3f(1, 0, 1);
 	glVertex3f(-0.5, -0.5, 0.5);
 	glVertex3f(0.5, -0.5, 0.5);
 	glColor3f(1, 0, 0);
 	glVertex3f(0.5, -0.5, -0.5);
+
+	glColor3f(1, 0, 0);
+	glVertex3f(-0.5, -0.5, -0.5);
 	glColor3f(1, 0, 1);
-	glVertex3f(-0.5, 0.5, -0.5);
-	glColor3f(1, 0, 1);
+	glVertex3f(-0.5, -0.5, 0.5);
 	glVertex3f(-0.5, 0.5, 0.5);
+	glColor3f(1, 0, 0);
+	glVertex3f(-0.5, 0.5, -0.5);
+	
+	glColor3f(1, 0, 0);
+	glVertex3f(0.5, -0.5, -0.5);
+	glColor3f(1, 0, 1);
+	glVertex3f(0.5, -0.5, 0.5);
 	glVertex3f(0.5, 0.5, 0.5);
 	glColor3f(1, 0, 0);
 	glVertex3f(0.5, 0.5, -0.5);
+	
+	glColor3f(1, 0, 1);
+	glVertex3f(-0.5, -0.5, 0.5);
+	glVertex3f(-0.5, 0.5, 0.5);
+	glVertex3f(0.5, 0.5, 0.5);
+	glVertex3f(0.5, -0.5, 0.5);
+	glEnd();
+	
+	glBegin(GL_TRIANGLES);
+	glColor3f(0, 1, 1);
+	glVertex3f(-0.5, 0.5, -0.5);
+        glVertex3f(0.5, 0.5, -0.5);
+        glColor3f(1, 0, 1);
+        glVertex3f(0.0, 1.0, 0.0);
+ 	glColor3f(0, 1, 1);
+	glVertex3f(-0.5, 0.5, 0.5);
+        glVertex3f(0.5, 0.5, 0.5);
+        glColor3f(1, 0, 1);
+        glVertex3f(0.0, 1.0, 0.0);
+ 	glColor3f(0, 1, 1);
+	glVertex3f(-0.5, 0.5, -0.5);
+        glVertex3f(-0.5, 0.5, 0.5);
+        glColor3f(1, 0, 1);
+        glVertex3f(0.0, 1.0, 0.0);
+ 	glColor3f(0, 1, 1);
+	glVertex3f(0.5, 0.5, -0.5);
+        glVertex3f(0.5, 0.5, 0.5);
+        glColor3f(1, 0, 1);
+        glVertex3f(0.0, 1.0, 0.0);
+	glEnd();
+	
+	glBegin(GL_LINES);
+	glColor3f(1, 1, 0);
+	glVertex3f(0.0, 1.0, 0.0);
+	glVertex3f(0.0, 5.0, 0.0);
 	glEnd();
 
 	glPopMatrix();
@@ -97,19 +142,22 @@ void draw_renderGround()
 	glBegin(GL_QUADS);
 	glColor3f(0, 1, 0.1);
 	glVertex3f(0, 0, 0);
-	glVertex3f(0, 10, 0);
-	glVertex3f(10, 10, 0);
-	glVertex3f(10, 0, 0);
+	glVertex3f(0, 100, 0);
+	glVertex3f(100, 100, 0);
+	glVertex3f(100, 0, 0);
 	glEnd();
 	
 	glLineWidth(2.0f);
 
+        glColor3f(0, 0.8, 0.5);
 	glBegin(GL_LINES);
-	glColor3f(0, 0.8, 0.5);
-	glVertex3f(5, 0, 0.01);
-	glVertex3f(5, 10, 0.01);
-	glVertex3f(0, 5, 0.01);
-	glVertex3f(10, 5, 0.01);
+	for (int i = 0; i < 10; i++)
+	{
+		glVertex3f(i*10, 0, 0.01);
+		glVertex3f(i*10, 100, 0.01);
+		glVertex3f(0, i*10, 0.01);
+		glVertex3f(100, i*10, 0.01);
+	}
 	glEnd();
 }
 
@@ -143,9 +191,18 @@ void renderP2()
 	draw_renderGround();
 
 	draw_P1Model();
-	
 
 	draw_P2Model();
+	
+	glMatrixMode(GL_PROJECTION);
+	glOrtho(0, 320, 240, 480, 0, 1);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+
+	glBegin(GL_POINTS);
+	glColor3f(1.0, 1.0, 1.0);
+	glVertex2f(20, 20);
+	glEnd();
 }
 
 // this is the primary rendering function. from here the two screen-drawing functions should be called
@@ -205,23 +262,23 @@ void loop()
 			p1_camZLook = p1_Z - p1_camZ;
 
 			double p2_Thrust = 0.0;
-			
+
 			if (keys[SDLK_SPACE])
 			{
-				p2_Thrust = 0.1;
+				p2_Thrust = 0.5;
 			}
 
 			//changes the rotate value based on arrow keys, and slowly snaps back
 			if (keys[SDLK_DOWN])
 			{
-				if (p2_XRotate <= 90)
+				if (p2_XRotate <= 30)
 				{
 					p2_XRotate += 2.0;
 				}
 			}
 			else if (keys[SDLK_UP])
 			{
-				if (p2_XRotate >= -90)
+				if (p2_XRotate >= -30)
 				{
 					p2_XRotate -= 2.0;
 				}
@@ -253,7 +310,7 @@ void loop()
 
 			p2_camX = p2_X - 3*cos((M_PI/180.0)*(p2_ZRotate - 90));
 			p2_camY = p2_Y - 3*sin((M_PI/180.0)*(p2_ZRotate + 90));
-			p2_camZ = p2_Z + 3*sin((M_PI/180.0)*(p2_XRotate));
+			p2_camZ = p2_Z + 3*sin((M_PI/180.0)*(p2_XRotate)) + 2;
 	                p2_camXLook = p2_X;
 			p2_camYLook = p2_Y;
 			p2_camZLook = p2_Z;
