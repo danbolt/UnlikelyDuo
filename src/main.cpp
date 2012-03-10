@@ -33,6 +33,8 @@ double p2_Z = 1.0;
 double p2_XRotate = 0.0;
 double p2_YRotate = 0.0;
 double p2_ZRotate = 0.0;
+bool p2_turnLeft = false;
+bool p2_turnRight = false;
 
 double p1_camX = 0.0;
 double p1_camY = 0.0;
@@ -65,6 +67,15 @@ void draw_P2Model()
 	glTranslatef(p2_X, p2_Y, p2_Z);
 	glRotatef(-p2_ZRotate, 0, 0, 1);
 	glRotatef(-p2_XRotate, 1, 0, 0);
+
+	if (p2_turnLeft)
+	{
+		glRotatef(-20, 0, 1, 0);
+	}
+	else if (p2_turnRight)
+	{
+		glRotatef(20, 0, 1, 0);
+	}
 
 	glBegin(GL_QUADS);
 	glColor3f(1, 0, 0);
@@ -263,7 +274,7 @@ void loop()
 
 			double p2_Thrust = 0.0;
 
-			if (keys[SDLK_SPACE])
+			if (keys[SDLK_z])
 			{
 				p2_Thrust = 0.5;
 			}
@@ -285,23 +296,38 @@ void loop()
 			}
 			else
 			{
-				if (p2_XRotate > 1.0)
+				if (fabs(p2_XRotate) <= 0.5)
 				{
-					p2_XRotate -= 2.0;
+					p2_XRotate = 0.0;
 				}
-				else if (p2_XRotate < -1.0)
+				else if (p2_XRotate > 0.5)
 				{
-					p2_XRotate += 2.0;
+					p2_XRotate -= 1.0;
+				}
+				else if (p2_XRotate < -0.5)
+				{
+					p2_XRotate += 1.0;
 				}
 			}
 			
 			if (keys[SDLK_LEFT])
 			{
 				p2_ZRotate -= 2.0;
+				p2_turnLeft = true;
 			}
+			else
+			{
+				p2_turnLeft = false;
+			}	
+
 			if (keys[SDLK_RIGHT])
 			{
 				p2_ZRotate += 2.0;
+				p2_turnRight = true;
+			}
+			else
+			{
+				p2_turnRight = false;
 			}
 
 			p2_X += p2_Thrust*cos((M_PI/180.0)*(p2_ZRotate - 90));
