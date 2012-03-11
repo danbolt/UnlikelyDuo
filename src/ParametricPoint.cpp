@@ -12,4 +12,4 @@ ParametricPoint::ParametricPoint(double newX, double newY, double newNormalDirec
 ParametricPoint::~ParametricPoint()
 {
 	//
-}	
+}

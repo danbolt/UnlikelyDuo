@@ -17,6 +17,7 @@
 #include <GL/gl.h>
 
 #include "ParametricPoint.h"
+#include "VectorTrack.h"
 
 using namespace std;
 
@@ -55,17 +56,21 @@ double p2_camXLook = 0.0;
 double p2_camYLook = 0.0;
 double p2_camZLook = 0.0;
 
-vector<ParametricPoint> pointList;
+VectorTrack vt;
+double agentSpot = 0.0;
 
 void draw_P1Model()
 {
+	glPushMatrix();
+	glTranslatef(p1_X, p1_Y, p1_Z);
 	glBegin(GL_QUADS);
 	glColor3f(0, 0, 1);
-	glVertex3f(p1_X, p1_Y, p1_Z);
-	glVertex3f(p1_X, p1_Y + 1, p1_Z);
-	glVertex3f(p1_X + 1, p1_Y + 1, p1_Z);
-	glVertex3f(p1_X + 1, p1_Y, p1_Z);
+	glVertex3f(-0.5, -0.5, 0.0);
+	glVertex3f(-0.5, 0.5, 0.0);
+	glVertex3f(0.5, 0.5, 0.0);
+	glVertex3f(0.5, -0.5, 0.0);
 	glEnd();
+	glPopMatrix();
 }
 
 void draw_P2Model()
@@ -213,7 +218,7 @@ void renderP1()
 
 	draw_P2Model();
 	
-	for(std::vector<ParametricPoint>::iterator it = pointList.begin(); it != pointList.end(); ++it)
+	for(std::vector<ParametricPoint>::iterator it = vt.pointList.begin(); it != vt.pointList.end(); ++it)
 	{
 		draw_ParametricPoint(&(*it));
 	}
@@ -235,10 +240,16 @@ void renderP2()
 
 	draw_P2Model();
 	
-	for(std::vector<ParametricPoint>::iterator it = pointList.begin(); it != pointList.end(); ++it)
+	for(std::vector<ParametricPoint>::iterator it = vt.pointList.begin(); it != vt.pointList.end(); ++it)
 	{
 		draw_ParametricPoint(&(*it));
 	}
+
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex3f(p1_camX, p1_camY, p1_camZ);
+	glVertex3f(p1_camXLook, p1_camYLook, p1_camZLook);
+	glEnd();
 }
 
 // this is the primary rendering function. from here the two screen-drawing functions should be called
@@ -273,7 +284,7 @@ void loop()
 		{
 			keys = SDL_GetKeyState(NULL);
 			
-			if (keys[SDLK_d])
+			/*if (keys[SDLK_d])
 			{
 				p1_X += 0.1;
 			}
@@ -288,14 +299,31 @@ void loop()
 			if (keys[SDLK_s])
 			{
 				p1_Y -= 0.1;
+			}   */
+			if (keys[SDLK_d])
+			{
+				if (agentSpot < 1)
+				{
+					agentSpot += 0.01;
+				}
 			}
-	
-			p1_camX = p1_X;
+			if (keys[SDLK_a])
+			{
+				if (agentSpot > 0)
+				{
+					agentSpot -= 0.01;
+				}
+			}
+			
+			vt.getSpotOnTrack(agentSpot, p1_X, p1_Y);
+			vt.computeCameraCoordinates(agentSpot, p1_camX, p1_camY, p1_camZ, p1_camXLook, p1_camYLook, p1_camZLook);
+
+			/*p1_camX = p1_X;
 			p1_camY = p1_Y - 5;
 			p1_camZ = p1_Z + 5;
 	                p1_camXLook = p1_X - p1_camX;
 			p1_camYLook = p1_Y - p1_camY;
-			p1_camZLook = p1_Z - p1_camZ;
+			p1_camZLook = p1_Z - p1_camZ;    */
 
 			double p2_Thrust = 0.0;
 
@@ -409,18 +437,15 @@ int main (int argc, char* argv[])
 {
 	init();
 	
-	ParametricPoint p1(30, 20, 0);
-	ParametricPoint p2(50, 20, 0);
-	ParametricPoint p3(70, 20, 0);
+	vt.pushPoint(0, 0, 0);
+	vt.pushPoint(20, 20, 180);
+	vt.pushPoint(40, 40, 0);
+	vt.pushPoint(60, 60, 180);
+	vt.pushPoint(80, 80, 0);
+	vt.pushPoint(100, 100, 180);
 
-	pointList.push_back(p1);
-	pointList.push_back(p2);
-	pointList.push_back(p3);
-	
 	loop();
-	
-	pointList.clear();
-	
+
 	deinit();
 
 	return 0;
