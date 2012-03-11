@@ -435,6 +435,8 @@ int main (int argc, char* argv[])
 	vt.pushPoint(40, 20, -90);
 	vt.pushPoint(20, 40, -180);
 	vt.pushPoint(0, 60, -90);
+	vt.pushPoint(20, 80, 0);
+	vt.pushPoint(20, 60, 90);
 
 	loop();
 
