@@ -115,8 +115,11 @@ void VectorTrack::computeCameraCoordinates(double pos, double& camX, double& cam
 	double x = (1 - soFar)*(a.x) + soFar*(b.x);
 	double y = (1 - soFar)*(a.y) + soFar*(b.y);
 	
-	camX = x + 6*sin((M_PI/180.0)*(a.normalDirection));
-	camY = y + 6*cos((M_PI/180.0)*(a.normalDirection));
+	//compute the interpolated direction between a's and b's direction
+	double midAngle = (1 - soFar)*(a.normalDirection) + soFar*(b.normalDirection);
+	
+	camX = x + 6*sin((M_PI/180.0)*(midAngle + 180));
+	camY = y + 6*cos((M_PI/180.0)*(midAngle + 180));
 	camZ = 5.0;
 
 	lookX = x - camX;

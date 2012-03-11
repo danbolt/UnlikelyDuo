@@ -244,12 +244,6 @@ void renderP2()
 	{
 		draw_ParametricPoint(&(*it));
 	}
-
-	glBegin(GL_LINES);
-	glColor3f(1, 0, 0);
-	glVertex3f(p1_camX, p1_camY, p1_camZ);
-	glVertex3f(p1_camXLook, p1_camYLook, p1_camZLook);
-	glEnd();
 }
 
 // this is the primary rendering function. from here the two screen-drawing functions should be called
@@ -437,12 +431,10 @@ int main (int argc, char* argv[])
 {
 	init();
 	
-	vt.pushPoint(0, 0, 0);
-	vt.pushPoint(20, 20, 180);
-	vt.pushPoint(40, 40, 0);
-	vt.pushPoint(60, 60, 180);
-	vt.pushPoint(80, 80, 0);
-	vt.pushPoint(100, 100, 180);
+	vt.pushPoint(20, 0, 0);
+	vt.pushPoint(40, 20, -90);
+	vt.pushPoint(20, 40, -180);
+	vt.pushPoint(0, 60, -90);
 
 	loop();
 
