@@ -117,8 +117,23 @@ void VectorTrack::computeCameraCoordinates(double pos, double& camX, double& cam
 	double x = (1 - soFar)*(a.x) + soFar*(b.x);
 	double y = (1 - soFar)*(a.y) + soFar*(b.y);
 	
+	double aAngle = a.normalDirection;
+	double bAngle = b.normalDirection;
+	
+	if (fabs(bAngle - aAngle) > 180.0)
+	{
+		if (bAngle > aAngle)
+		{
+			bAngle -= 360.0;
+		}
+		else
+		{
+			aAngle -= 360.0;
+		}
+	}
+
 	//compute the interpolated direction between a's and b's direction
-	double midAngle = (1 - soFar)*(a.normalDirection) + soFar*(b.normalDirection);
+	double midAngle = (1 - soFar)*(aAngle) + soFar*(bAngle);
 	
 	camX = x + 6*sin((M_PI/180.0)*(midAngle + 180));
 	camY = y + 6*cos((M_PI/180.0)*(midAngle + 180));

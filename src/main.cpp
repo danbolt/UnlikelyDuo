@@ -432,10 +432,13 @@ int deinit()
 int main (int argc, char* argv[])
 {
 	init();
-	
-	vt.pushPoint(0, 0, 0);
-	vt.pushPoint(5, 5, 45);
-	vt.pushPoint(10, 5, -20);
+
+	vt.pushPoint(10, 10, 0);
+	vt.pushPoint(20, 10, 180);
+	vt.pushPoint(30, 10, 270);
+	vt.pushPoint(40, 10, 45);
+	vt.pushPoint(50, 10, 270);
+	vt.pushPoint(60, 10, 135);
 
 	loop();
 
