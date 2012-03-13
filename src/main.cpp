@@ -32,6 +32,7 @@ GLfloat p2View[16];  // player 2 perspective
 double p1_X = 50.0;
 double p1_Y = 0.0;
 double p1_Z = 0.1;
+double p1_Face = 0.0; //angle the player should be facing, in degrees
 
 double p2_X = 0.0;
 double p2_Y = 0.0;
@@ -63,6 +64,7 @@ void draw_P1Model()
 {
 	glPushMatrix();
 	glTranslatef(p1_X, p1_Y, p1_Z);
+	glRotatef(p1_Face, 0, 0, 1);
 	glBegin(GL_QUADS);
 	glColor3f(0, 0, 1);
 	glVertex3f(-0.5, -0.5, 0.0);
@@ -309,7 +311,7 @@ void loop()
 				}
 			}
 			
-			vt.getSpotOnTrack(agentSpot, p1_X, p1_Y);
+			vt.getSpotOnTrack(agentSpot, p1_X, p1_Y, p1_Face);
 			vt.computeCameraCoordinates(agentSpot, p1_camX, p1_camY, p1_camZ, p1_camXLook, p1_camYLook, p1_camZLook);
 
 			/*p1_camX = p1_X;
@@ -431,12 +433,9 @@ int main (int argc, char* argv[])
 {
 	init();
 	
-	vt.pushPoint(20, 0, 0);
-	vt.pushPoint(40, 20, -90);
-	vt.pushPoint(20, 40, -180);
-	vt.pushPoint(0, 60, -90);
-	vt.pushPoint(20, 80, 0);
-	vt.pushPoint(20, 60, 90);
+	vt.pushPoint(0, 0, 0);
+	vt.pushPoint(5, 5, 45);
+	vt.pushPoint(10, 5, -20);
 
 	loop();
 

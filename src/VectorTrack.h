@@ -21,7 +21,7 @@ class VectorTrack
 		double getSpecificTrackLength(unsigned int a, unsigned int b); //between two points
 		
 		// MUST supply a parametric position between [0,1] and an x/y to fill
-		void getSpotOnTrack(double pos, double& x, double& y);
+		void getSpotOnTrack(double pos, double& x, double& y, double &rot);
 		
 		// MUST supply a parametric position between [0,1] and and two x/y/z's to fill
 		void computeCameraCoordinates(double pos, double& camX, double& camY, double& camZ, double& lookX, double& lookY, double& lookZ);

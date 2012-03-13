@@ -58,7 +58,7 @@ double VectorTrack::getSpecificTrackLength(unsigned int a, unsigned int b)
 	return sum;
 }
 
-void VectorTrack::getSpotOnTrack(double pos, double& x, double& y)
+void VectorTrack::getSpotOnTrack(double pos, double& x, double& y, double &rot)
 {
 	if (pos <= 0 || pos >= 1)
 	{
@@ -85,6 +85,8 @@ void VectorTrack::getSpotOnTrack(double pos, double& x, double& y)
 
 	x = (1 - soFar)*(a.x) + soFar*(b.x);
 	y = (1 - soFar)*(a.y) + soFar*(b.y);
+	
+	rot = (180.0/M_PI)*atan2(b.y - a.y, b.x - a.x);
 }
 
 void VectorTrack::computeCameraCoordinates(double pos, double& camX, double& camY, double& camZ, double& lookX, double& lookY, double& lookZ)
