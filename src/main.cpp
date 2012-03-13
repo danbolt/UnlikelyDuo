@@ -65,12 +65,11 @@ void draw_P1Model()
 	glPushMatrix();
 	glTranslatef(p1_X, p1_Y, p1_Z);
 	glRotatef(p1_Face, 0, 0, 1);
-	glBegin(GL_QUADS);
+	glBegin(GL_TRIANGLES);
 	glColor3f(0, 0, 1);
 	glVertex3f(-0.5, -0.5, 0.0);
 	glVertex3f(-0.5, 0.5, 0.0);
-	glVertex3f(0.5, 0.5, 0.0);
-	glVertex3f(0.5, -0.5, 0.0);
+	glVertex3f(0.5, 0.0, 0.0);
 	glEnd();
 	glPopMatrix();
 }
