@@ -279,40 +279,24 @@ void loop()
 		//update block
 		{
 			keys = SDL_GetKeyState(NULL);
-			
-			/*if (keys[SDLK_d])
-			{
-				p1_X += 0.1;
-			}
-			if (keys[SDLK_a])
-			{
-				p1_X -= 0.1;
-			}
-			if (keys[SDLK_w])
-			{
-				p1_Y += 0.1;
-			}
-			if (keys[SDLK_s])
-			{
-				p1_Y -= 0.1;
-			}   */
+
 			if (keys[SDLK_d])
 			{
-				if (agentSpot < 1)
+				if (agentSpot < vt.getTrackLength())
 				{
-					agentSpot += 0.01;
+					agentSpot += 0.5;
 				}
 			}
 			if (keys[SDLK_a])
 			{
 				if (agentSpot > 0)
 				{
-					agentSpot -= 0.01;
+					agentSpot -= 0.5;
 				}
 			}
 			
-			vt.getSpotOnTrack(agentSpot, p1_X, p1_Y, p1_Face);
-			vt.computeCameraCoordinates(agentSpot, p1_camX, p1_camY, p1_camZ, p1_camXLook, p1_camYLook, p1_camZLook);
+			vt.getSpotOnTrack(agentSpot/vt.getTrackLength(), p1_X, p1_Y, p1_Face);
+			vt.computeCameraCoordinates(agentSpot/vt.getTrackLength(), p1_camX, p1_camY, p1_camZ, p1_camXLook, p1_camYLook, p1_camZLook);
 
 			/*p1_camX = p1_X;
 			p1_camY = p1_Y - 5;
@@ -434,11 +418,10 @@ int main (int argc, char* argv[])
 	init();
 
 	vt.pushPoint(10, 10, 0);
-	vt.pushPoint(20, 10, 180);
-	vt.pushPoint(30, 10, 270);
-	vt.pushPoint(40, 10, 45);
-	vt.pushPoint(50, 10, 270);
-	vt.pushPoint(60, 10, 135);
+	vt.pushPoint(40, 10, 270);
+	vt.pushPoint(40, 40, 0);
+	vt.pushPoint(90, 40, 270);
+	vt.pushPoint(90, 90, 0);
 
 	loop();
 
