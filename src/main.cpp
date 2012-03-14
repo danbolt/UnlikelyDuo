@@ -59,6 +59,7 @@ double p2_camZLook = 0.0;
 
 VectorTrack vt;
 double agentSpot = 0.0;
+double agentVerticalDisplacement = 0.0; //between -1.0 and 1.0 to determine track offset
 
 void draw_P1Model()
 {
@@ -279,6 +280,21 @@ void loop()
 		{
 			keys = SDL_GetKeyState(NULL);
 
+			if (keys[SDLK_w])
+			{
+				if (agentVerticalDisplacement < 1.1)
+				{
+					agentVerticalDisplacement += 0.1;
+				}
+			}
+			if (keys[SDLK_s])
+			{
+				if (agentVerticalDisplacement > -1.1)
+				{
+					agentVerticalDisplacement -= 0.1;
+				}
+			}
+
 			if (keys[SDLK_d])
 			{
 				if (agentSpot < vt.getTrackLength())
@@ -294,7 +310,7 @@ void loop()
 				}
 			}
 			
-			vt.getSpotOnTrack(agentSpot/vt.getTrackLength(), p1_X, p1_Y, p1_Face);
+			vt.getSpotOnTrack(agentSpot/vt.getTrackLength(), agentVerticalDisplacement, p1_X, p1_Y, p1_Face);
 			vt.computeCameraCoordinates(agentSpot/vt.getTrackLength(), p1_camX, p1_camY, p1_camZ, p1_camXLook, p1_camYLook, p1_camZLook);
 
 			/*p1_camX = p1_X;
@@ -416,11 +432,16 @@ int main (int argc, char* argv[])
 {
 	init();
 
-	vt.pushPoint(10, 10, 0);
-	vt.pushPoint(40, 10, 270);
-	vt.pushPoint(40, 40, 0);
-	vt.pushPoint(90, 40, 270);
-	vt.pushPoint(90, 90, 0);
+	//vt.pushPoint(10, 10, 0);
+        //vt.pushPoint(30, 12, 350);
+        //vt.pushPoint(40, 14, 340);
+        //vt.pushPoint(50, 16, 330);
+
+        for (int i = 1; abs(i) <= 180; i -= 30)
+        {
+		vt.pushPoint(50*cos((M_PI/180.0)*i) + 50, 50*sin((M_PI/180.0)*i) + 50, i - 90);
+        }
+
 
 	loop();
 
