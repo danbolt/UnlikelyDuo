@@ -219,6 +219,14 @@ void renderP1()
 	draw_P1Model();
 
 	draw_P2Model();
+
+	glBegin(GL_LINE_STRIP);
+	glColor3f(1, 0.8, 0.009);
+	for(std::vector<ParametricPoint>::iterator it = vt.pointList.begin(); it != vt.pointList.end(); ++it)
+	{
+		glVertex3f((*it).x, (*it).y, 0.075);
+	}
+	glEnd();
 	
 	for(std::vector<ParametricPoint>::iterator it = vt.pointList.begin(); it != vt.pointList.end(); ++it)
 	{
@@ -241,7 +249,7 @@ void renderP2()
 	draw_P1Model();
 
 	draw_P2Model();
-	
+
 	for(std::vector<ParametricPoint>::iterator it = vt.pointList.begin(); it != vt.pointList.end(); ++it)
 	{
 		draw_ParametricPoint(&(*it));
@@ -299,26 +307,20 @@ void loop()
 			{
 				if (agentSpot < vt.getTrackLength())
 				{
-					agentSpot += 0.5;
+					agentSpot += 0.25;
 				}
 			}
 			if (keys[SDLK_a])
 			{
 				if (agentSpot > 0)
 				{
-					agentSpot -= 0.5;
+					agentSpot -= 0.25;
 				}
 			}
 			
 			vt.getSpotOnTrack(agentSpot/vt.getTrackLength(), agentVerticalDisplacement, p1_X, p1_Y, p1_Face);
 			vt.computeCameraCoordinates(agentSpot/vt.getTrackLength(), p1_camX, p1_camY, p1_camZ, p1_camXLook, p1_camYLook, p1_camZLook);
 
-			/*p1_camX = p1_X;
-			p1_camY = p1_Y - 5;
-			p1_camZ = p1_Z + 5;
-	                p1_camXLook = p1_X - p1_camX;
-			p1_camYLook = p1_Y - p1_camY;
-			p1_camZLook = p1_Z - p1_camZ;    */
 
 			double p2_Thrust = 0.0;
 
