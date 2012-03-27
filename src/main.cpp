@@ -19,6 +19,9 @@
 #include "ParametricPoint.h"
 #include "VectorTrack.h"
 
+#include "md2.h"
+#include "texture.h"
+
 using namespace std;
 
 SDL_Surface* screen;
@@ -61,17 +64,16 @@ VectorTrack vt;
 double agentSpot = 0.0;
 double agentVerticalDisplacement = 0.0; //between -1.0 and 1.0 to determine track offset
 
+CMD2Model* testModel;
+
 void draw_P1Model()
 {
 	glPushMatrix();
 	glTranslatef(p1_X, p1_Y, p1_Z);
 	glRotatef(p1_Face, 0, 0, 1);
-	glBegin(GL_TRIANGLES);
-	glColor3f(0, 0, 1);
-	glVertex3f(-0.5, -0.5, 0.0);
-	glVertex3f(-0.5, 0.5, 0.0);
-	glVertex3f(0.5, 0.0, 0.0);
-	glEnd();
+	glEnable( GL_TEXTURE_2D );
+	testModel->DrawModel(0.4f);
+	glDisable( GL_TEXTURE_2D );
 	glPopMatrix();
 }
 
@@ -434,10 +436,24 @@ int main (int argc, char* argv[])
 {
 	init();
 
-	//vt.pushPoint(10, 10, 0);
-        //vt.pushPoint(30, 12, 350);
-        //vt.pushPoint(40, 14, 340);
-        //vt.pushPoint(50, 16, 330);
+	testModel = new CMD2Model();
+	
+	CTextureManager::GetInstance()->Initialize();
+
+	if (testModel->LoadModel("../gfx/Ogros.md2") == false)
+	{
+		printf("couldn't load model");
+		return 0;
+	}
+
+	if (testModel->LoadSkin("../gfx/igdosh.pcx") == false)
+	{
+		printf("couldn't load skin");
+		return 0;
+	}
+	
+	testModel->SetAnim( 0 );
+	testModel->ScaleModel( 0.25 );
 
         for (int i = 1; abs(i) <= 180; i -= 30)
         {
@@ -446,6 +462,8 @@ int main (int argc, char* argv[])
 
 
 	loop();
+	
+	delete testModel;
 
 	deinit();
 
