@@ -71,6 +71,9 @@ void draw_P1Model()
 	glPushMatrix();
 	glTranslatef(p1_X, p1_Y, p1_Z);
 	glRotatef(p1_Face, 0, 0, 1);
+	glRotatef(90, 1, 0, 0);
+	glRotatef(90, 0, 1, 0);
+	glTranslatef(0, 2, 0);
 	glEnable( GL_TEXTURE_2D );
 	testModel->DrawModel(0.4f);
 	glDisable( GL_TEXTURE_2D );
@@ -453,7 +456,7 @@ int main (int argc, char* argv[])
 	}
 	
 	testModel->SetAnim( 0 );
-	testModel->ScaleModel( 0.25 );
+	testModel->ScaleModel( 0.125 );
 
         for (int i = 1; abs(i) <= 180; i -= 30)
         {
