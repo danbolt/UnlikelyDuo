@@ -15,3 +15,34 @@ void Entity::update(Uint32 currTime)
 {
 	entityUpdate(currTime);
 }
+
+GLfloat Entity::getX()
+{
+	return x;
+}
+
+GLfloat Entity::getY()
+{
+	return y;
+}
+
+GLfloat Entity::getZ()
+{
+	return z;
+}
+
+GLfloat Entity::getWidth()
+{
+	return width;
+}
+
+GLfloat Entity::getHeight()
+{
+	return height;
+}
+
+GLfloat Entity::getDepth()
+{
+	return depth;
+}
+

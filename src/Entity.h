@@ -20,6 +20,13 @@ class Entity : public WorldObject
 	void update(Uint32 currTime);
 	virtual void entityUpdate(Uint32 currTime) = 0; // entityUpdate() is called instead of update
 	virtual void draw() = 0;
+	
+	GLfloat getX();
+	GLfloat getX();
+	GLfloat getX();
+	GLfloat getWidth();
+	GLfloat getHeight();
+	GLfloat getDepth();
 
 	// draws a wire box of the object's physical dimensions
 	virtual void drawHitBox() = 0;
