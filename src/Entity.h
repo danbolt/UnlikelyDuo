@@ -22,14 +22,14 @@ class Entity : public WorldObject
 	virtual void draw() = 0;
 	
 	GLfloat getX();
-	GLfloat getX();
-	GLfloat getX();
+	GLfloat getY();
+	GLfloat getZ();
 	GLfloat getWidth();
 	GLfloat getHeight();
 	GLfloat getDepth();
 
-	// draws a wire box of the object's physical dimensions
-	virtual void drawHitBox() = 0;
+	// draws a pseudo wide box of dimensions in data
+	void drawHitBox();
 
 	// checks if other entity's box overlaps with this entity
 	// the inverse of this method [eg: other->hitTest(this)] might not return the same

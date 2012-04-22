@@ -16,8 +16,7 @@
 #include <GL/glu.h>
 
 // other source files
-#include "WorldObject.h"
-#include "Entity.h"
+#include "TestEntity.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -46,6 +45,20 @@ bool init()
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	
+	// push this into its own cpp file later
+	glEnable(GL_LIGHT0);
+	GLfloat position[] = { 4.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat lightDiffuse[] = {0.5f, 0.5f, 0.5f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+	
+	// right now it's helpful if ambient + diffuse is the same for everything
+	// we might want to make this class-specific later if it doesn't look good,
+	// although this is meant to look like a playstation 1 game, keep in mind
+	GLfloat ambient[] = {0.5f, 0.5f, 0.5f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
 
 	return true;
 }
@@ -67,18 +80,24 @@ void draw()
 	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0.0,0.0,0.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
 	gluPerspective(90, 1.3, 1, 75);
 	glViewport(0, 0, 640, 480);
 	
-	gluLookAt(10, 0, 10, 0, 0, 0, 0, 0, 1);
+	gluLookAt(10, 10, 0, 0, 0, 0, 1, 0, 0);
 	
-	GLUquadricObj* someQuadric = gluNewQuadric();
+	glRotatef(SDL_GetTicks() / 100, 0, 1, 0);
+	
+	TestEntity en(0, 0, 0, SDL_GetTicks());
+	en.draw();
+	en.drawHitBox();
+
+	/*GLUquadricObj* someQuadric = gluNewQuadric();
 	gluSphere(someQuadric , 5, 6, 6);
-	gluDeleteQuadric(someQuadric);
+	gluDeleteQuadric(someQuadric);*/
 
 	SDL_GL_SwapBuffers();
 }
