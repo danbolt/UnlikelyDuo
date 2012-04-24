@@ -23,6 +23,9 @@
 
 SDL_Surface* screen;
 
+TestEntity* en1;
+TestEntity* en2;
+
 bool init()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -87,13 +90,16 @@ void draw()
 	gluPerspective(90, 1.3, 1, 75);
 	glViewport(0, 0, 640, 480);
 	
-	gluLookAt(10, 10, 0, 0, 0, 0, 1, 0, 0);
+	gluLookAt(5, 15, 10, 0, 0, 0, 0, 0, 1);
+
+
+	en1->draw();
+	en2->draw();
 	
-	glRotatef(SDL_GetTicks() / 100, 0, 1, 0);
-	
-	TestEntity en(0, 0, 0, SDL_GetTicks());
-	en.draw();
-	en.drawHitBox();
+	if (en2->hitTest(en1))
+	{
+		en2->setZ(10);
+	}
 
 	/*GLUquadricObj* someQuadric = gluNewQuadric();
 	gluSphere(someQuadric , 5, 6, 6);
@@ -106,6 +112,10 @@ void mainLoop()
 {
 	int quit = 0;
 	SDL_Event ev;
+	
+	en1 = new TestEntity(0, 0, -5, SDL_GetTicks(), 10, 10, 5);
+	en2 = new TestEntity(-2.5f, -2.5f, 3, SDL_GetTicks(), 5, 5, 5);
+	en2->zSpeed = -1;
 
 	while (!quit)
 	{
@@ -116,6 +126,11 @@ void mainLoop()
 				quit = 1;
 			}
 		}
+		
+		Uint32 ticks = SDL_GetTicks();
+
+		en1->update(ticks);
+		en2->update(ticks);
 		
 		draw();
 		

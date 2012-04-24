@@ -12,6 +12,7 @@ class TestEntity : public Entity
 {
 	public:
 	TestEntity(GLfloat newX, GLfloat newY, GLfloat newZ,  Uint32 currTime);
+	TestEntity(GLfloat newX, GLfloat newY, GLfloat newZ,  Uint32 currTime, GLfloat newWidth, GLfloat newHeight, GLfloat newDepth);
 	~TestEntity();
 	
 	// should return "TestEntity"
@@ -20,8 +21,7 @@ class TestEntity : public Entity
 	void entityUpdate(Uint32 currTime);
 	void draw();
 	
-	bool hitTest(Entity* other);
-	void getDisplacement(Entity* other, GLfloat &xDis, GLfloat &yDis, GLfloat &zDis);
+	void setZ(GLfloat newZ);
 
 	protected:
 	//

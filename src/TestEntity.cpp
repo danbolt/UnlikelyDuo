@@ -25,6 +25,23 @@ TestEntity::TestEntity(GLfloat newX, GLfloat newY, GLfloat newZ,  Uint32 currTim
 	lastUpdateTime = currTime;
 }
 
+TestEntity::TestEntity(GLfloat newX, GLfloat newY, GLfloat newZ,  Uint32 currTime, GLfloat newWidth, GLfloat newHeight, GLfloat newDepth)
+{
+	x = newX;
+	y = newY;
+	z = newZ;
+	
+	width = newWidth;
+	height = newHeight;
+	depth = newDepth;
+
+	xSpeed = 0;
+	ySpeed = 0;
+	zSpeed = 0;
+	
+	lastUpdateTime = currTime;
+}
+
 TestEntity::~TestEntity()
 {
 	//
@@ -44,6 +61,7 @@ void TestEntity::entityUpdate(Uint32 currTime)
 	lastUpdateTime = currTime;
 }
 
+/*
 bool TestEntity::hitTest(Entity* other)
 {
 	return false;
@@ -52,7 +70,7 @@ bool TestEntity::hitTest(Entity* other)
 void TestEntity::getDisplacement(Entity* other, GLfloat &xDis, GLfloat &yDis, GLfloat &zDis)
 {
 	return;
-}
+}       */
 
 void TestEntity::draw()
 {
@@ -101,4 +119,9 @@ void TestEntity::draw()
 	
 	glPopMatrix();
 }
+
+void TestEntity::setZ(GLfloat newZ)
+{
+	z = newZ;
+}	
 

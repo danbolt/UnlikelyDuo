@@ -58,3 +58,24 @@ void Entity::drawHitBox()
 	glPopMatrix();
 }
 
+bool Entity::hitTest(Entity* other)
+{
+	if (x < other->getX() + other->getWidth() && x + width > other->getX())
+	{
+		if (y < other->getY() + other->getHeight() && y + height > other->y)
+		{
+			if (z < other->getZ() + other->getDepth() && z + depth > other->getZ())
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+void Entity::getDisplacement(Entity* other, GLfloat &xDis, GLfloat &yDis, GLfloat &zDis)
+{
+	//
+}	
+
